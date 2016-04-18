@@ -20,13 +20,19 @@ public class CommonJobProperties {
 	/*
 	 * The following are Common properties that can be set in a job file
 	 */
-	
+
+
+
 	/**
 	 * The type of job that will be executed.
 	 * Examples: command, java, etc.
 	 */
 	public static final String JOB_TYPE = "type";
-	
+	/**
+	*  The hadoop proxy user of job that will be used by all jobpyte
+	*/
+	public static final String HADOOP_PROXY_USER = "HADOOP_PROXY_USER";
+
 	/**
 	 * Comma delimited list of job names which are dependencies
 	 */

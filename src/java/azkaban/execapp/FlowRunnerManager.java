@@ -392,15 +392,16 @@ public class FlowRunnerManager implements EventListener {
 		int numJobThreads = numJobThreadPerFlow;
 		if(options.getFlowParameters().containsKey("flow.num.job.threads")) {
 			try{
+
 				int numJobs = Integer.valueOf(options.getFlowParameters().get("flow.num.job.threads"));
 				if(numJobs > 0 && numJobs <= numJobThreads) {
-					numJobThreads = numJobs;
+					numJobThreads = numJobs;//default 30
 				}
 			} catch (Exception e) {
 				throw new ExecutorManagerException("Failed to set the number of job threads " + options.getFlowParameters().get("flow.num.job.threads") + " for flow " + execId, e);
 			}
 		}
-		
+		logger.debug("submit a new flow");
 		FlowRunner runner = new FlowRunner(flow, executorLoader, projectLoader, jobtypeManager);
 		runner.setFlowWatcher(watcher)
 			.setJobLogSettings(jobLogChunkSize, jobLogNumFiles)

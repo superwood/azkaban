@@ -19,13 +19,7 @@ package azkaban.execapp;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.EnhancedPatternLayout;
@@ -349,20 +343,35 @@ public class JobRunner extends EventHandler implements Runnable {
 			}
 			props.put(CommonJobProperties.JOB_ATTEMPT, node.getAttempt());
 			props.put(CommonJobProperties.JOB_METADATA_FILE, createMetaDataFileName(executionId, node.getJobId(), node.getAttempt()));
+
 			node.setStatus(Status.RUNNING);
 
 			// Ability to specify working directory
 			if (!props.containsKey(AbstractProcessJob.WORKING_DIR)) {
 				props.put(AbstractProcessJob.WORKING_DIR, workingDir.getAbsolutePath());
 			}
-			
+			/*
+			*  add hadoop proxy user to evn
+			*/
+			logger.debug("will add user proxy to job");
+			String defaultProxyUser = null;
+			Iterator<String> it = proxyUsers.iterator();
+			while ( null != proxyUsers && it.hasNext()){
+				defaultProxyUser = it.next();
+				props.put(AbstractProcessJob.ENV_PREFIX+CommonJobProperties.HADOOP_PROXY_USER, defaultProxyUser);
+				break;
+			}
 			if(props.containsKey("user.to.proxy")) {
 				String jobProxyUser = props.getString("user.to.proxy");
 				if(proxyUsers != null && !proxyUsers.contains(jobProxyUser)) {
 					logger.error("User " + jobProxyUser + " has no permission to execute this job " + node.getJobId() + "!");
 					return false;
+				}else{
+					defaultProxyUser = jobProxyUser;
+					props.put(AbstractProcessJob.ENV_PREFIX+CommonJobProperties.HADOOP_PROXY_USER, jobProxyUser);
 				}
 			}
+			logger.info("proxy user is "+defaultProxyUser);
 			
 			//job = JobWrappingFactory.getJobWrappingFactory().buildJobExecutor(node.getJobId(), props, logger);
 			try {
