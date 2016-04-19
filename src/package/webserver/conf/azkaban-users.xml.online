@@ -5,10 +5,26 @@
 	<user username="engineer" password="engineermb" groups="engineer"/>
 	<user username="scientist" password="scientistmb" groups="scientist"/>
 	<user username="dataplatform" password="dataplatformmb" groups="dataplatform"/>
+	<user username="msystem" password="msystemmb" groups="msystem"/>
+	<user username="3ssystem" password="3ssystemmb" groups="3ssystem"/>
+	<user username="game" password="gamemb" groups="game"/>
+	<user username="news" password="newsmb" groups="news"/>
+	<user username="fbplatform" password="fbplatformmb" groups="fbplatform"/>
+	<user username="ops" password="opsmb" groups="ops"/>
+	<user username="qas" password="qasmb" groups="qas"/>
+
+
 
     <group name="engineer" roles="write, exec, scheduler, creator, read" />
     <group name="scientist" roles="write, exec, scheduler, creator, read" />
     <group name="dataplatform" roles="write, exec, scheduler, creator, read" />
+    <group name="msystem" roles="write, exec, scheduler, creator, read" />
+    <group name="3ssystem" roles="write, exec, scheduler, creator, read" />
+    <group name="game" roles="write, exec, scheduler, creator, read" />
+    <group name="news" roles="write, exec, scheduler, creator, read" />
+    <group name="fbplatform" roles="write, exec, scheduler, creator, read" />
+    <group name="ops" roles="write, exec, scheduler, creator, read" />
+    <group name="qas" roles="write, exec, scheduler, creator, read" />
 
 
     <role name="write" permissions="WRITE"/>

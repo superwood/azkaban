@@ -1,0 +1,35 @@
+#Azkaban
+default.timezone.id=UTC
+
+# Azkaban JobTypes Plugins
+azkaban.jobtype.plugin.dir=plugins/jobtypes
+
+#Loader for projects
+executor.global.properties=conf/global.properties
+azkaban.project.dir=projects
+
+azkaban.stats.dir=
+
+database.type=mysql
+mysql.port=3306
+mysql.host=52.6.68.159
+mysql.database=azkaban_online
+mysql.user=azkaban_online
+mysql.password=azkaban_online
+mysql.numconnections=100
+
+# Azkaban Executor settings
+azkaban.should.proxy=true
+obtain.binary.token=false
+proxy.user.lock.down=true
+
+
+
+
+##同时并发work flow数
+executor.maxThreads=50
+executor.port=12321
+
+##每个work flow并发执行
+executor.flow.threads=30
+
