@@ -167,14 +167,21 @@
 		<mkdir dir="${dist.web.package.dir}/plugins" />
 		<mkdir dir="${dist.web.package.dir}/extlib" />	
 			
-		<!-- Copy Azkaban jars and libs-->
+		<!-- Copy Azkaban jars , libs and extlibs-->
 		<copy file="${azkaban.jar}" todir="${dist.web.package.dir}/lib" />
 		<copy todir="${dist.web.package.dir}/lib" >
 			<fileset dir="${lib.dir}" >
 				<exclude name="hadoop-core*.jar"/>
 			</fileset>		
 		</copy>
-		
+	    
+		<copy todir="${dist.web.package.dir}/extlib" >
+			<fileset dir="${extlib.dir}" >
+				<exclude name="hadoop-core*.jar"/>
+			</fileset>		
+		</copy>
+
+
 		<!-- Copy bin files for web server only-->
 		<copy todir="${dist.web.package.dir}/bin">
 			<fileset dir="${web.package.dir}/bin"/>
@@ -226,7 +233,11 @@
 				<exclude name="hadoop-core*.jar"/>
 			</fileset>
 		</copy>
-		
+		<copy todir="${dist.web.package.dir}/extlib" >
+			<fileset dir="${extlib.dir}" >
+				<exclude name="hadoop-core*.jar"/>
+			</fileset>		
+		</copy>
 		<!-- Copy bin files for exec server only-->
 		<copy todir="${dist.exec.package.dir}/bin" >
 			<fileset dir="${exec.package.dir}/bin"/>
