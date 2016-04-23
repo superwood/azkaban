@@ -46,21 +46,21 @@ azkaban.FlowExecuteDialogView = Backbone.View.extend({
 	
 	initialize: function(settings) {
 		this.model.bind('change:flowinfo', this.changeFlowInfo, this);
-		$("#overrideSuccessEmails").click(function(evt) {
+		$("#override-success-emails").click(function(evt) {
 			if ($(this).is(':checked')) {
-				$('#successEmails').attr('disabled', null);
+				$('#success-emails').attr('disabled', null);
 			}
 			else {
-				$('#successEmails').attr('disabled', "disabled");
+				$('#success-emails').attr('disabled', "disabled");
 			}
 		});
 				
-		$("#overrideFailureEmails").click(function(evt) {
+		$("#override-failure-emails").click(function(evt) {
 			if ($(this).is(':checked')) {
-				$('#failureEmails').attr('disabled', null);
+				$('#failure-emails').attr('disabled', null);
 			}
 			else {
-				$('#failureEmails').attr('disabled', "disabled");
+				$('#failure-emails').attr('disabled', "disabled");
 			}
 		});
 	},
@@ -69,25 +69,25 @@ azkaban.FlowExecuteDialogView = Backbone.View.extend({
 	},
 	
 	getExecutionOptionData: function() {
-		var failureAction = $('#failureAction').val();
-		var failureEmails = $('#failureEmails').val();
-		var successEmails = $('#successEmails').val();
-		var notifyFailureFirst = $('#notifyFailureFirst').is(':checked');
-		var notifyFailureLast = $('#notifyFailureLast').is(':checked');
-		var failureEmailsOverride = $("#overrideFailureEmails").is(':checked');
-		var successEmailsOverride = $("#overrideSuccessEmails").is(':checked');
-		
+		var failureAction = $('#failure-action').val();
+		var failureEmails = $('#failure-emails').val();
+		var successEmails = $('#success-emails').val();
+		var notifyFailureFirst = $('#notify-failure-first').is(':checked');
+		var notifyFailureLast = $('#notify-failure-last').is(':checked');
+		var failureEmailsOverride = $("#override-failure-emails").is(':checked');
+		var successEmailsOverride = $("#override-success-emails").is(':checked');
 		var flowOverride = {};
 		var editRows = $(".editRow");
 		for (var i = 0; i < editRows.length; ++i) {
 			var row = editRows[i];
-			var td = $(row).find('td');
+			var td = $(row).find('span');
 			var key = $(td[0]).text();
 			var val = $(td[1]).text();
 			
 			if (key && key.length > 0) {
 				flowOverride[key] = val;
-			}
+            }
+
 		}
 		
 		var disabled = "";
@@ -145,33 +145,33 @@ azkaban.FlowExecuteDialogView = Backbone.View.extend({
 		var overrideFailureEmails = this.model.get("overrideFailureEmails");
 		
 		if (overrideSuccessEmails) {
-			$('#overrideSuccessEmails').attr('checked', true);
+			$('#override-success-emails').attr('checked', true);
 		}
 		else {
-			$('#successEmails').attr('disabled','disabled');
+			$('#success-emails').attr('disabled','disabled');
 		}
 		if (overrideFailureEmails) {
-			$('#overrideFailureEmails').attr('checked', true);
+			$('#override-failure-emails').attr('checked', true);
 		}
 		else {
-			$('#failureEmails').attr('disabled','disabled');
+			$('#failure-emails').attr('disabled','disabled');
 		}
 		
 		if (successEmails) {
-			$('#successEmails').val(successEmails.join());
+			$('#success-emails').val(successEmails.join());
 		}
 		if (failureEmails) {
-			$('#failureEmails').val(failureEmails.join());
+			$('#failure-emails').val(failureEmails.join());
 		}
 		if (failureActions) {
-		$('#failureAction').val(failureActions);
+		$('#failure-action').val(failureActions);
 		}
 		
 		if (notifyFailure.first) {
-		$('#notifyFailureFirst').attr('checked', true);
+		$('#notify-failure-first').attr('checked', true);
 		}
 		if (notifyFailure.last) {
-			$('#notifyFailureLast').attr('checked', true);
+			$('#notify-failure-last').attr('checked', true);
 		}
 		
 		if (concurrentOption) {
@@ -326,16 +326,16 @@ azkaban.EditTableView = Backbone.View.extend({
 	
 		var tr = document.createElement("tr");
 		var tdName = document.createElement("td");
-    $(tdName).addClass('property-key');
+		$(tdName).addClass('property-key');
 		var tdValue = document.createElement("td");
 		
 		var remove = document.createElement("div");
-    $(remove).addClass("pull-right").addClass('remove-btn');
-    var removeBtn = document.createElement("button");
-    $(removeBtn).attr('type', 'button');
-    $(removeBtn).addClass('btn').addClass('btn-xs').addClass('btn-danger');
-    $(removeBtn).text('Delete');
-    $(remove).append(removeBtn);
+		$(remove).addClass("pull-right").addClass('remove-btn');
+		var removeBtn = document.createElement("button");
+		$(removeBtn).attr('type', 'button');
+		$(removeBtn).addClass('btn').addClass('btn-xs').addClass('btn-danger');
+		$(removeBtn).text('Delete');
+		$(remove).append(removeBtn);
 
 		var nameData = document.createElement("span");
 		$(nameData).addClass("spanValue");
@@ -348,13 +348,12 @@ azkaban.EditTableView = Backbone.View.extend({
 		$(tdName).addClass("editable");
 		
 		$(tdValue).append(valueData);
-    $(tdValue).append(remove);
+		$(tdValue).append(remove);
 		$(tdValue).addClass("editable").addClass('value');
 		
 		$(tr).addClass("editRow");
 		$(tr).append(tdName);
 		$(tr).append(tdValue);
-	 
 		$(tr).insertBefore(".addRow");
 		return tr;
 	},
@@ -404,13 +403,13 @@ azkaban.EditTableView = Backbone.View.extend({
 		$(valueData).text(text);
 
 		if ($(parent).hasClass("value")) {
-      var remove = document.createElement("div");
-      $(remove).addClass("pull-right").addClass('remove-btn');
-      var removeBtn = document.createElement("button");
-      $(removeBtn).attr('type', 'button');
-      $(removeBtn).addClass('btn').addClass('btn-xs').addClass('btn-danger');
-      $(removeBtn).text('Delete');
-      $(remove).append(removeBtn);
+			var remove = document.createElement("div");
+			$(remove).addClass("pull-right").addClass('remove-btn');
+			var removeBtn = document.createElement("button");
+			$(removeBtn).attr('type', 'button');
+			$(removeBtn).addClass('btn').addClass('btn-xs').addClass('btn-danger');
+			$(removeBtn).text('Delete');
+			$(remove).append(removeBtn);
 			$(parent).append(remove);
 		}
 		

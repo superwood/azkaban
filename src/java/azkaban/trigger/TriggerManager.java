@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
+
+import azkaban.trigger.builtin.BasicTimeChecker;
 import org.apache.log4j.Logger;
 
 import azkaban.execapp.event.Event;
@@ -35,6 +37,7 @@ import azkaban.execapp.event.Event.Type;
 import azkaban.executor.ExecutableFlow;
 import azkaban.executor.ExecutorManager;
 import azkaban.utils.Props;
+import org.joda.time.format.DateTimeFormat;
 
 public class TriggerManager extends EventHandler implements TriggerManagerAdapter{
 	private static Logger logger = Logger.getLogger(TriggerManager.class);
@@ -239,8 +242,10 @@ public class TriggerManager extends EventHandler implements TriggerManagerAdapte
 						if(runnerThreadIdleTime < 0) {
 							logger.error("Trigger manager thread " + this.getName() + " is too busy!");
 						} else {
-							wait(runnerThreadIdleTime);
+							//wait(runnerThreadIdleTime);fix sheduler error
+							syncObj.wait(runnerThreadIdleTime);
 						}
+						//logger.debug("interval again wuchao");
 					} catch(InterruptedException e) {
 						logger.info("Interrupted. Probably to shut down.");
 					}
@@ -273,6 +278,7 @@ public class TriggerManager extends EventHandler implements TriggerManagerAdapte
 				
 				logger.info("Checking trigger " + t.getTriggerId());
 				if(t.getStatus().equals(TriggerStatus.READY)) {
+					//logger.debug("wuchao trigger? " +t.triggerConditionMet() +" "+  t.expireConditionMet());
 					if(t.triggerConditionMet()) {
 						onTriggerTrigger(t);
 					} else if (t.expireConditionMet()) {
@@ -280,8 +286,10 @@ public class TriggerManager extends EventHandler implements TriggerManagerAdapte
 					}
 				}
 				if(t.getStatus().equals(TriggerStatus.EXPIRED) && t.getSource().equals("azkaban")) {
+					//logger.debug("wuchao trigger? remove time "+t.getSource());
 					removeTrigger(t);
 				} else {
+					//logger.debug("wuchao trigger? next time "+t.getSource());
 					t.updateNextCheckTime();
 				}
 			}
@@ -291,7 +299,23 @@ public class TriggerManager extends EventHandler implements TriggerManagerAdapte
 			List<TriggerAction> actions = t.getTriggerActions();
 			for(TriggerAction action : actions) {
 				try {
+
 					logger.info("Doing trigger actions");
+					long currentCheckTime = 0;
+					for ( ConditionChecker checker:t.getTriggerCondition().getCheckers().values()){
+						if (checker instanceof BasicTimeChecker){
+							long tmp = ((BasicTimeChecker) checker).getCurrentCheckTime();
+							if( tmp > currentCheckTime ){
+								currentCheckTime = tmp;
+							}
+						}
+					}
+					if(currentCheckTime > 0){
+						Map<String, Object> context = new HashMap<String, Object>();
+						String scheduleTime = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss").print(currentCheckTime);
+						context.put("ScheduleTime", scheduleTime);
+						action.setContext(context);
+					}
 					action.doAction();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

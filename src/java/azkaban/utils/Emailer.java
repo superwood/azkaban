@@ -46,15 +46,18 @@ public class Emailer extends AbstractMailer implements Alerter {
 	private String clientPortNumber;
 
 	private String mailHost;
+	private int    mailPort;
 	private String mailUser;
 	private String mailPassword;
 	private String mailSender;
 	private String azkabanName;
 
+
 	public Emailer(Props props) {
 		super(props);
 		this.azkabanName = props.getString("azkaban.name", "azkaban");
 		this.mailHost = props.getString("mail.host", "localhost");
+		this.mailPort = props.getInt("mail.port",-1);
 		this.mailUser = props.getString("mail.user", "");
 		this.mailPassword = props.getString("mail.password", "");
 		this.mailSender = props.getString("mail.sender", "");
@@ -99,7 +102,7 @@ public class Emailer extends AbstractMailer implements Alerter {
 	}
 
 	public void sendFirstErrorMessage(ExecutableFlow flow) {
-		EmailMessage message = new EmailMessage(mailHost, mailUser, mailPassword);
+		EmailMessage message = new EmailMessage(mailHost, mailPort,mailUser, mailPassword);
 		message.setFromAddress(mailSender);
 
 		ExecutionOptions option = flow.getExecutionOptions();
@@ -120,7 +123,7 @@ public class Emailer extends AbstractMailer implements Alerter {
 	}
 
 	public void sendErrorEmail(ExecutableFlow flow, String... extraReasons) {
-		EmailMessage message = new EmailMessage(mailHost, mailUser, mailPassword);
+		EmailMessage message = new EmailMessage(mailHost, mailPort, mailUser, mailPassword);
 		message.setFromAddress(mailSender);
 
 		ExecutionOptions option = flow.getExecutionOptions();
@@ -140,7 +143,7 @@ public class Emailer extends AbstractMailer implements Alerter {
 	}
 
 	public void sendSuccessEmail(ExecutableFlow flow) {
-		EmailMessage message = new EmailMessage(mailHost, mailUser, mailPassword);
+		EmailMessage message = new EmailMessage(mailHost, mailPort, mailUser, mailPassword);
 		message.setFromAddress(mailSender);
 
 		ExecutionOptions option = flow.getExecutionOptions();

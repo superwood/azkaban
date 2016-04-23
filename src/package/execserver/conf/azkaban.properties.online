@@ -27,9 +27,9 @@ proxy.user.lock.down=true
 
 
 ##同时并发work flow数
-executor.maxThreads=50
+executor.maxThreads=100
 executor.port=12321
-
+azkaban.execution.dir=executions
 ##每个work flow并发执行
 executor.flow.threads=30
 

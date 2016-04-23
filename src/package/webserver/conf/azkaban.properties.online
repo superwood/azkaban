@@ -4,7 +4,7 @@ azkaban.label=Mobvista Azkaban
 azkaban.color=#FF3601
 azkaban.default.servlet.path=/index
 web.resource.dir=web/
-default.timezone.id=UTC
+default.timezone.id=America/Los_Angeles
 
 #Azkaban UserManager class
 user.manager.class=azkaban.user.XmlUserManager
@@ -39,12 +39,12 @@ jetty.trustpassword=123456
 
 # Azkaban Executor settings
 executor.port=12321
-executor.host=52.3.17.31
+executor.host=52.5.47.234
 # mail settings
-mail.sender=walt@mobvista.com
-mail.host=imap.exmail.qq.com
-mail.user=walt                                                                                     
-mail.password=Wuchao19861127 
+mail.sender=monitor.dataPlatform@mobvista.com
+mail.host=smtp.exmail.qq.com
+mail.user=monitor.dataPlatform@mobvista.com                                                                         
+mail.password=Mobvista_256 
 
 
 job.failure.email=

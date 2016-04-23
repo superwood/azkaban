@@ -19,6 +19,7 @@ package azkaban.project;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,8 @@ public class ProjectManager {
 	private final File tempDir;
 	private final int projectVersionRetention;
 	private final boolean creatorDefaultPermissions;
-	
+	private final Permission projectDefaultPermissions = new Permission();
+
 	public ProjectManager(ProjectLoader loader, Props props) {
 		this.projectLoader = loader;
 		this.props = props;
@@ -58,6 +60,11 @@ public class ProjectManager {
 		logger.info("Project version retention is set to " + projectVersionRetention);
 		
 		this.creatorDefaultPermissions = props.getBoolean("creator.default.proxy", true);
+		List<String> defaultPermissions = props.getStringList("project.default.permissions",Arrays.asList("ADMIN"), ",");
+		for(String name:defaultPermissions){
+			String permissName = name.trim();
+			projectDefaultPermissions.addPermissionsByName(permissName);
+		}
 		
 		if (!tempDir.exists()) {
 			tempDir.mkdirs();
@@ -188,10 +195,10 @@ public class ProjectManager {
 		Project newProject = projectLoader.createNewProject(projectName, description, creator);
 		projectsByName.put(newProject.getName(), newProject);
 		projectsById.put(newProject.getId(), newProject);
-		
+
 		if(creatorDefaultPermissions) {
 		// Add permission to project
-			projectLoader.updatePermission(newProject, creator.getUserId(), new Permission(Permission.Type.ADMIN), false);
+			projectLoader.updatePermission(newProject, creator.getUserId(), projectDefaultPermissions, false);
 			
 			// Add proxy user 
 			newProject.addProxyUser(creator.getUserId());

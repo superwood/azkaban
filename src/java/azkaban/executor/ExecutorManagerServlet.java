@@ -151,6 +151,7 @@ public class ExecutorManagerServlet extends AbstractServiceServlet {
 	private void handleAjaxSubmitFlow(HttpServletRequest req, HashMap<String, Object> respMap, int execid) {
 		try{
 			String execFlowJson = getParam(req, ExecutorManagerAdapter.INFO_EXEC_FLOW_JSON);
+			logger.debug("submit flow js "+execFlowJson);
 			ExecutableFlow exflow = ExecutableFlow.createExecutableFlowFromObject(JSONUtils.parseJSONFromString(execFlowJson));
 			String user = getParam(req, ExecutorManagerAdapter.INFO_USER_ID);
 			executorManager.submitExecutableFlow(exflow, user);

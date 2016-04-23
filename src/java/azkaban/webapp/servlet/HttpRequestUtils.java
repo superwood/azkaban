@@ -27,11 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 import azkaban.executor.ExecutionOptions;
 import azkaban.executor.ExecutionOptions.FailureAction;
 import azkaban.executor.mail.DefaultMailCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpRequestUtils {
+	public static Logger logger = LoggerFactory.getLogger(HttpRequestUtils.class);
 	public static ExecutionOptions parseFlowOptions(HttpServletRequest req) throws ServletException {
 		ExecutionOptions execOptions = new ExecutionOptions();
-		
 		if (hasParam(req, "failureAction")) {
 			String option = getParam(req, "failureAction");
 			if (option.equals("finishCurrent") ) {

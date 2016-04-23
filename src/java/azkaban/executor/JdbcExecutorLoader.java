@@ -93,8 +93,8 @@ public class JdbcExecutorLoader extends AbstractJdbcLoader implements ExecutorLo
 				throw new ExecutorManagerException("Execution id is not properly created.");
 			}
 			logger.info("Flow given " + flow.getFlowId() + " given id " + id);
-			flow.setExecutionId((int)id);
-			
+			flow.setExecutionId((int) id);
+			//logger.debug("map obj flow "+ flow.toObject());
 			updateExecutableFlow(connection, flow, encType);
 		} catch (SQLException e) {
 			throw new ExecutorManagerException("Error creating execution.", e);
@@ -106,6 +106,7 @@ public class JdbcExecutorLoader extends AbstractJdbcLoader implements ExecutorLo
 		Connection connection = this.getConnection();
 		
 		try {
+			//logger.debug("map obj flow "+ flow.toObject());
 			updateExecutableFlow(connection, flow, defaultEncodingType);
 		}
 		finally {
@@ -118,6 +119,7 @@ public class JdbcExecutorLoader extends AbstractJdbcLoader implements ExecutorLo
 		QueryRunner runner = new QueryRunner();
 		
 		String json = JSONUtils.toJSON(flow.toObject());
+		//logger.debug("flow json "+json);
 		byte[] data = null;
 		try {
 			byte[] stringData = json.getBytes("UTF-8");
@@ -914,16 +916,17 @@ public class JdbcExecutorLoader extends AbstractJdbcLoader implements ExecutorLo
 					try {
 						// Convoluted way to inflate strings. Should find common package 
 						// or helper function.
+						String jsonString = null;
 						if (encType == EncodingType.GZIP) {
 							// Decompress the sucker.
-							String jsonString = GZIPUtils.unGzipString(data, "UTF-8");
+							jsonString = GZIPUtils.unGzipString(data, "UTF-8");
 							flowObj = JSONUtils.parseJSONFromString(jsonString);
 						}
 						else {
-							String jsonString = new String(data, "UTF-8");
+							jsonString = new String(data, "UTF-8");
 							flowObj = JSONUtils.parseJSONFromString(jsonString);
 						}
-						
+
 						ExecutableFlow exFlow = 
 								ExecutableFlow.createExecutableFlowFromObject(flowObj);
 						execFlows.add(exFlow);

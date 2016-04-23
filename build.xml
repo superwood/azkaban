@@ -28,6 +28,8 @@
 	<property name="sql.src.dir" value="${basedir}/src/sql" />
 	
 	<property name="azkaban.jar" value="${dist.jar.dir}/${name}-${version}.jar" />
+	<property name="log4j.properties" value="${basedir}/src/java/log4j.properties" />
+
 
 	<property environment="env" />
 
@@ -168,7 +170,9 @@
 		<mkdir dir="${dist.web.package.dir}/extlib" />	
 			
 		<!-- Copy Azkaban jars , libs and extlibs-->
-		<copy file="${azkaban.jar}" todir="${dist.web.package.dir}/lib" />
+		
+		<copy file="${log4j.properties}" todir="${dist.web.package.dir}/" />
+        <copy file="${azkaban.jar}" todir="${dist.web.package.dir}/lib" />
 		<copy todir="${dist.web.package.dir}/lib" >
 			<fileset dir="${lib.dir}" >
 				<exclude name="hadoop-core*.jar"/>
@@ -226,14 +230,15 @@
 		<mkdir dir="${dist.exec.package.dir}/plugins" />
 		<mkdir dir="${dist.exec.package.dir}/extlib" />
 				
-		<!-- Copy Azkaban jars and libs-->
+		<!-- Copy Azkaban jars libs extlibs-->
+		<copy file="${log4j.properties}" todir="${dist.exec.package.dir}/" />
 		<copy file="${azkaban.jar}" todir="${dist.exec.package.dir}/lib" />
 		<copy todir="${dist.exec.package.dir}/lib" >
 			<fileset dir="${lib.dir}" >
 				<exclude name="hadoop-core*.jar"/>
 			</fileset>
 		</copy>
-		<copy todir="${dist.web.package.dir}/extlib" >
+		<copy todir="${dist.exec.package.dir}/extlib" >
 			<fileset dir="${extlib.dir}" >
 				<exclude name="hadoop-core*.jar"/>
 			</fileset>		

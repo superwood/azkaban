@@ -46,8 +46,8 @@ if [ -z $AZKABAN_OPTS ]; then
   AZKABAN_OPTS="-Xmx4G"
 fi
 AZKABAN_OPTS="$AZKABAN_OPTS -server -Dcom.sun.management.jmxremote -Djava.io.tmpdir=$tmpdir -Dexecutorport=$executorport -Dserverpath=$serverpath"
-
-java $AZKABAN_OPTS $JAVA_LIB_PATH -cp $CLASSPATH azkaban.webapp.AzkabanWebServer -conf $azkaban_dir/conf $@ &
+##DEBUG_OPTS="-Xdebug -server -Xrunjdwp:transport=dt_socket,server=y,address=8001"
+java $AZKABAN_OPTS $DEBUG_OPTS $JAVA_LIB_PATH -cp $CLASSPATH azkaban.webapp.AzkabanWebServer -conf $azkaban_dir/conf $@ &
 
 echo $! > currentpid
 

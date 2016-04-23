@@ -89,7 +89,7 @@
 										<h4>Success Emails</h4>
 										<div class="checkbox">
 											<label>
-												<input type="checkbox" name="overrideSuccessEmails" value="overrideSuccessEmails">
+												<input type="checkbox" id="override-success-emails" name="overrideSuccessEmails" value="overrideSuccessEmails">
 												Override flow email settings.
 											</label>
 										</div>

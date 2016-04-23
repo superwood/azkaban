@@ -403,7 +403,7 @@ public class ProjectManagerServlet extends LoginAbstractAzkabanServlet {
 			flowInfo.put("startTime", flow.getStartTime());
 			flowInfo.put("endTime", flow.getEndTime());
 			flowInfo.put("submitUser", flow.getSubmitUser());
-			
+			flowInfo.put("ScheduleTime", flow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
 			history.add(flowInfo);
 		}
 		

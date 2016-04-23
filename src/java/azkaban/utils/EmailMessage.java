@@ -46,6 +46,7 @@ public class EmailMessage {
 	private String _mailPassword;
 	private String _subject;
 	private String _fromAddress;
+	private int    _mailPort = -1;
 	private String _mimeType = "text/plain";
 	private StringBuffer _body = new StringBuffer();
 	private static int _mailTimeout = 10000;
@@ -60,6 +61,12 @@ public class EmailMessage {
 	public EmailMessage(String host, String user, String password) {
 		_mailUser = user;
 		_mailHost = host;
+		_mailPassword = password;
+	}
+	public EmailMessage(String host, int port, String user, String password) {
+		_mailUser = user;
+		_mailHost = host;
+		_mailPort = port;
 		_mailPassword = password;
 	}
 	
@@ -195,7 +202,11 @@ public class EmailMessage {
 //		Transport transport = session.getTransport();
 		
 		SMTPTransport t = (SMTPTransport) session.getTransport(protocol);
-		t.connect(_mailHost, _mailUser, _mailPassword);
+		if (-1 == _mailPort) {
+			t.connect(_mailHost, _mailUser, _mailPassword);
+		}else{
+			t.connect(_mailHost, _mailPort, _mailUser, _mailPassword);
+		}
 		t.sendMessage(message,
 				message.getRecipients(Message.RecipientType.TO));
 		t.close();

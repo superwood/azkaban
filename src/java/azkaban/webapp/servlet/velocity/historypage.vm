@@ -82,6 +82,7 @@
                 <th>User</th>
                 <th class="date">Start Time</th>
                 <th class="date">End Time</th>
+                <th class="date">Schedule Time</th>
                 <th class="elapse">Elapsed</th>
                 <th class="status">Status</th>
                 <th class="action">Action</th>
@@ -90,6 +91,11 @@
             <tbody>
   #if (!$flowHistory.isEmpty())
     #foreach ($flow in $flowHistory)
+        #set( $ScheduleTime=${flow.executionOptions.flowParameters.get("ScheduleTime")} )
+        #if( $ScheduleTime )
+        #else
+            #set($ScheduleTime="No Set")
+        #end
               <tr>
                 <td class="tb-name execId">
                   <a href="${context}/executor?execid=${flow.executionId}">${flow.executionId}</a>
@@ -103,6 +109,7 @@
                 <td>${flow.submitUser}</td>
                 <td>$utils.formatDate(${flow.startTime})</td>
                 <td>$utils.formatDate(${flow.endTime})</td>
+				<td>${ScheduleTime}</td>
                 <td>$utils.formatDuration(${flow.startTime}, ${flow.endTime})</td>
                 <td>
                   <div class="status ${flow.status}">$utils.formatStatus(${flow.status})</div>

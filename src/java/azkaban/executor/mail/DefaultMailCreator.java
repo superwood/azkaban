@@ -54,13 +54,15 @@ public class DefaultMailCreator implements MailCreator {
 		ExecutionOptions option = flow.getExecutionOptions();
 		List<String> emailList = option.getDisabledJobs();
 		int execId = flow.getExecutionId();
-
+		int version = flow.getVersion();
+		int projectId = flow.getProjectId();
+		//String projectName = flow.getProjectId()
 		if (emailList != null && !emailList.isEmpty()) {
 			message.addAllToAddress(emailList);
 			message.setMimeType("text/html");
 			message.setSubject("Flow '" + flow.getFlowId() + "' has failed on " + azkabanName);
 
-			message.println("<h2 style=\"color:#FF0000\"> Execution '" + flow.getExecutionId() + "' of flow '" + flow.getFlowId() + "' has encountered a failure on " + azkabanName + "</h2>");
+			message.println("<h2 style=\"color:#FF0000\"> Execution '" + flow.getExecutionId() + "' of flow '" +projectId+"." +flow.getFlowId()+" version "+version + "' has encountered a failure on " + azkabanName + "</h2>");
 
 			if (option.getFailureAction() == FailureAction.CANCEL_ALL) {
 				message.println("This flow is set to cancel all currently running jobs.");
@@ -103,13 +105,15 @@ public class DefaultMailCreator implements MailCreator {
 
 		List<String> emailList = option.getFailureEmails();
 		int execId = flow.getExecutionId();
-
+		int version = flow.getVersion();
+		int projectId = flow.getProjectId();
 		if (emailList != null && !emailList.isEmpty()) {
 			message.addAllToAddress(emailList);
 			message.setMimeType("text/html");
 			message.setSubject("Flow '" + flow.getFlowId() + "' has failed on " + azkabanName);
 
-			message.println("<h2 style=\"color:#FF0000\"> Execution '" + execId + "' of flow '" + flow.getFlowId() + "' has failed on " + azkabanName + "</h2>");
+			message.println("<h2 style=\"color:#FF0000\"> Execution '" + flow.getExecutionId() + "' of flow '" + projectId + "." + flow.getFlowId() + " version "+version + "' has encountered a failure on " + azkabanName + "</h2>");
+			//message.println("<h2 style=\"color:#FF0000\"> Execution '" + execId + "' of flow '" + flow.getFlowId() + "' has failed on " + azkabanName + "</h2>");
 			message.println("<table>");
 			message.println("<tr><td>Start Time</td><td>" + flow.getStartTime() + "</td></tr>");
 			message.println("<tr><td>End Time</td><td>" + flow.getEndTime() + "</td></tr>");
@@ -143,13 +147,15 @@ public class DefaultMailCreator implements MailCreator {
 		List<String> emailList = option.getSuccessEmails();
 
 		int execId = flow.getExecutionId();
-
+		int version = flow.getVersion();
+		int projectId = flow.getProjectId();
 		if (emailList != null && !emailList.isEmpty()) {
 			message.addAllToAddress(emailList);
 			message.setMimeType("text/html");
-			message.setSubject("Flow '" + flow.getFlowId() + "' has succeeded on " + azkabanName);
 
-			message.println("<h2> Execution '" + flow.getExecutionId() + "' of flow '" + flow.getFlowId() + "' has succeeded on " + azkabanName + "</h2>");
+			message.setSubject("Flow '" + flow.getFlowId() + "' has succeeded on " + azkabanName);
+			message.println("<h2 style=\"color:#FF0000\"> Execution '" + flow.getExecutionId() + "' of flow '" + projectId + "." + flow.getFlowId() + " version "+version + "' has encountered a failure on " + azkabanName + "</h2>");
+			//message.println("<h2> Execution '" + flow.getExecutionId() + "' of flow '" + flow.getFlowId() + "' has succeeded on " + azkabanName + "</h2>");
 			message.println("<table>");
 			message.println("<tr><td>Start Time</td><td>" + flow.getStartTime() + "</td></tr>");
 			message.println("<tr><td>End Time</td><td>" + flow.getEndTime() + "</td></tr>");

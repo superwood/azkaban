@@ -48,8 +48,11 @@ import azkaban.utils.FileIOUtils.LogData;
 import azkaban.utils.JSONUtils;
 import azkaban.webapp.AzkabanWebServer;
 import azkaban.webapp.session.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecutorServlet extends LoginAbstractAzkabanServlet {
+	static  public Logger logger = LoggerFactory.getLogger(ExecutorServlet.class);
 	private static final long serialVersionUID = 1L;
 	private ProjectManager projectManager;
 	private ExecutorManagerAdapter executorManager;
@@ -132,9 +135,9 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 				else if (ajaxName.equals("fetchExecJobLogs")) {
 					ajaxFetchJobLogs(req, resp, ret, session.getUser(), exFlow);
 				}
-        else if (ajaxName.equals("fetchExecJobStats")) {
-          ajaxFetchJobStats(req, resp, ret, session.getUser(), exFlow);
-        }
+                else if (ajaxName.equals("fetchExecJobStats")) {
+                    ajaxFetchJobStats(req, resp, ret, session.getUser(), exFlow);
+                }
 				else if (ajaxName.equals("retryFailedJobs")) {
 					ajaxRestartFailed(req, resp, ret, session.getUser(), exFlow);
 				}
@@ -636,7 +639,7 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 	
 	private void ajaxFetchExecutableFlowUpdate(HttpServletRequest req, HttpServletResponse resp, HashMap<String, Object> ret, User user, ExecutableFlow exFlow) throws ServletException{
 		Long lastUpdateTime = Long.parseLong(getParam(req, "lastUpdateTime"));
-		System.out.println("Fetching " + exFlow.getExecutionId());
+		logger.info("Fetching " + exFlow.getExecutionId());
 		
 		Project project = getProjectAjaxByPermission(ret, exFlow.getProjectId(), user, Type.READ);
 		if (project == null) {
@@ -656,7 +659,8 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 			nodeObj.put("startTime", node.getStartTime());
 			nodeObj.put("endTime", node.getEndTime());
 			nodeObj.put("attempt", node.getAttempt());
-			
+
+
 			if (node.getAttempt() > 0) {
 				nodeObj.put("pastAttempts", node.getAttemptObjects());
 			}
@@ -670,10 +674,12 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 		ret.put("endTime", exFlow.getEndTime());
 		ret.put("submitTime", exFlow.getSubmitTime());
 		ret.put("updateTime", exFlow.getUpdateTime());
+		ret.put("ScheduleTime", exFlow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
+		//bug("ScheduleTime: " + exFlow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
 	}
 	
 	private void ajaxFetchExecutableFlow(HttpServletRequest req, HttpServletResponse resp, HashMap<String, Object> ret, User user, ExecutableFlow exFlow) throws ServletException {
-		System.out.println("Fetching " + exFlow.getExecutionId());
+		logger.info("Fetching " + exFlow.getExecutionId());
 
 		Project project = getProjectAjaxByPermission(ret, exFlow.getProjectId(), user, Type.READ);
 		if (project == null) {
@@ -762,8 +768,10 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 
 		ExecutionOptions options = HttpRequestUtils.parseFlowOptions(req);
 		exflow.setExecutionOptions(options);
+		//logger.debug("flow param "+ options.getFlowParameters());
 		if (!options.isFailureEmailsOverridden()) {
 			options.setFailureEmails(flow.getFailureEmails());
+
 		}
 		if (!options.isSuccessEmailsOverridden()) {
 			options.setSuccessEmails(flow.getSuccessEmails());

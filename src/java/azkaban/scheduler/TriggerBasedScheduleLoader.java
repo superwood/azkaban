@@ -116,7 +116,7 @@ public class TriggerBasedScheduleLoader implements ScheduleLoader {
 			lastUpdateTime = Math.max(lastUpdateTime, t.getLastModifyTime());
 			Schedule s = triggerToSchedule(t);
 			schedules.add(s);
-			System.out.println("loaded schedule for " + s.getProjectId() + s.getProjectName());
+			logger.info("loaded schedule for " + s.getProjectId() + s.getProjectName());
 		}
 		return schedules;
 		
@@ -198,7 +198,7 @@ public class TriggerBasedScheduleLoader implements ScheduleLoader {
 			lastUpdateTime = Math.max(lastUpdateTime, t.getLastModifyTime());
 			Schedule s = triggerToSchedule(t);
 			schedules.add(s);
-			System.out.println("loaded schedule for " + s.getProjectId() + s.getProjectName());
+			logger.info("loaded schedule for " + s.getProjectId() + s.getProjectName());
 		}
 		return schedules;
 	}

@@ -778,7 +778,7 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
 	private void finalizeFlows(ExecutableFlow flow) {
 
 		int execId = flow.getExecutionId();
-		
+		//logger.debug("map obj flow "+flow.toObject());
 		updaterStage = "finalizing flow " + execId;
 		// First we check if the execution in the datastore is complete
 		try {
@@ -825,8 +825,10 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
 		Alerter mailAlerter = alerters.get("email");
 		if(flow.getStatus() == Status.FAILED || flow.getStatus() == Status.KILLED)
 		{
+			//logger.debug("folw is Failed " + flow.getFlowId() + " email " + options.getFailureEmails());
 			if(options.getFailureEmails() != null && !options.getFailureEmails().isEmpty())
 			{
+				//logger.debug("fail Email "+ options.getFailureEmails());
 				try {
 					mailAlerter.alertOnError(flow, "Executor no longer seems to be running this execution. Most likely due to executor bounce.");
 				} catch (Exception e) {

@@ -280,6 +280,7 @@ public class ExecutableFlow {
 		flowObj.put("version", version);
 
 		flowObj.put("executionOptions", this.executionOptions.toObject());
+
 		flowObj.put("version", version);
 
 		ArrayList<Object> props = new ArrayList<Object>();

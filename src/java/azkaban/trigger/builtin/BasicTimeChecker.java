@@ -147,7 +147,14 @@ public class BasicTimeChecker implements ConditionChecker {
 	public BasicTimeChecker fromJson(Object obj) throws Exception{
 		return createFromJson(obj);
 	}
-	
+	public long getCurrentCheckTime(){
+		DateTime date = new DateTime(nextCheckTime).withZone(timezone);
+		if (period != null) {
+			date.minus(period);
+		}
+		return date.getMillis();
+	}
+
 	private void updateNextCheckTime(){
 		nextCheckTime = calculateNextCheckTime();
 	}

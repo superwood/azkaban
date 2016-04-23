@@ -119,7 +119,7 @@ public class Condition {
 	}
 	
 	public boolean isMet() {
-		logger.info("Testing condition " + expression);
+		logger.info("Testing condition " + expression.getExpression() + " context "+context.toString());
 		return expression.evaluate(context).equals(Boolean.TRUE);
 	}
 	

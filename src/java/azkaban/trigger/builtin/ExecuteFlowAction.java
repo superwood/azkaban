@@ -53,7 +53,8 @@ public class ExecuteFlowAction implements TriggerAction {
 	private static ProjectManager projectManager;
 	private ExecutionOptions executionOptions = new ExecutionOptions();
 	private List<SlaOption> slaOptions;
-	
+	private Map<String, Object> context = new HashMap<String, Object>();
+
 	private static Logger logger = Logger.getLogger(ExecuteFlowAction.class);
 	
 	public ExecuteFlowAction(String actionId, int projectId, String projectName, String flowName, String submitUser, ExecutionOptions executionOptions, List<SlaOption> slaOptions) {
@@ -229,6 +230,9 @@ public class ExecuteFlowAction implements TriggerAction {
 		if(!executionOptions.isSuccessEmailsOverridden()) {
 			executionOptions.setSuccessEmails(flow.getSuccessEmails());
 		}
+		executionOptions.getFlowParameters().put("ScheduleTime", context.get("ScheduleTime").toString());
+		logger.debug("ScheduleTime "+ context.get("ScheduleTime").toString()+ " "+context.get("ScheduleTime"));
+
 		exflow.setExecutionOptions(executionOptions);
 		
 		try{
@@ -286,6 +290,7 @@ public class ExecuteFlowAction implements TriggerAction {
 
 	@Override
 	public void setContext(Map<String, Object> context) {
+		this.context = context;
 	}
 
 	@Override
