@@ -9,3 +9,4 @@ src/java/azkaban/tools/
 src/package/webserver/conf/azkaban.properties.multiple
 src/web/js/azkaban/view/flow-execute.js.bak
 unit/unit.iml
+idea/

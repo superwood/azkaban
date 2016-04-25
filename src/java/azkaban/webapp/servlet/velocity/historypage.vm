@@ -114,7 +114,7 @@
                 <td>
                   <div class="status ${flow.status}">$utils.formatStatus(${flow.status})</div>
                 </td>
-                <td></td>
+                <td>"No Action"</td>
               </tr>
     #end
   #else

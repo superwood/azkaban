@@ -1,5 +1,5 @@
 #Azkaban
-default.timezone.id=UTC
+default.timezone.id=Asia/Chongqing
 
 # Azkaban JobTypes Plugins
 azkaban.jobtype.plugin.dir=plugins/jobtypes
@@ -8,7 +8,7 @@ azkaban.jobtype.plugin.dir=plugins/jobtypes
 executor.global.properties=conf/global.properties
 azkaban.project.dir=projects
 
-azkaban.stats.dir=
+azkaban.stats.dir=./stats/
 
 database.type=mysql
 mysql.port=3306
@@ -25,11 +25,14 @@ proxy.user.lock.down=true
 
 #Metrics
 executor.metric.reports=true
+#2*24*60*60*1000  2天
+execution.dir.retention=172800000
 
 ##同时并发work flow数
-executor.maxThreads=50
+executor.maxThreads=200
 executor.port=12321
 azkaban.execution.dir=executions
 ###每个work flow并发执行
 executor.flow.threads=30
-
+job.max.Xms=1G
+job.max.Xmx=2G

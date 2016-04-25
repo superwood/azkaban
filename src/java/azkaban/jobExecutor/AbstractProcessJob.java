@@ -128,7 +128,7 @@ public abstract class AbstractProcessJob extends AbstractJob {
 	public Props loadOutputFileProps(final File outputPropertiesFile) {
 		InputStream reader = null;
 		try {
-			System.err.println("output properties file=" + outputPropertiesFile.getAbsolutePath());
+			log.info("output properties file=" + outputPropertiesFile.getAbsolutePath());
 			reader = new BufferedInputStream(new FileInputStream(outputPropertiesFile));
 
 			Props outputProps = new Props();

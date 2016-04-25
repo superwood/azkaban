@@ -88,7 +88,7 @@ public class FlowRunnerManager implements EventListener {
 	
 	private long lastSubmitterThreadCheckTime = -1;
 	private long lastCleanerThreadCheckTime = -1;
-	private long executionDirRetention = 1*24*60*60*1000;
+	private long executionDirRetention = 1*24*60*60*1000;//1天
 	
 	// We want to limit the log sizes to about 20 megs
 	private String jobLogChunkSize = "5MB";

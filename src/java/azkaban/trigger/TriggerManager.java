@@ -41,7 +41,7 @@ import org.joda.time.format.DateTimeFormat;
 
 public class TriggerManager extends EventHandler implements TriggerManagerAdapter{
 	private static Logger logger = Logger.getLogger(TriggerManager.class);
-	public static final long DEFAULT_SCANNER_INTERVAL_MS = 60000;
+	public static final long DEFAULT_SCANNER_INTERVAL_MS = 60*1000;
 
 	private static Map<Integer, Trigger> triggerIdMap = new ConcurrentHashMap<Integer, Trigger>();
 	
@@ -314,6 +314,7 @@ public class TriggerManager extends EventHandler implements TriggerManagerAdapte
 						Map<String, Object> context = new HashMap<String, Object>();
 						String scheduleTime = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss").print(currentCheckTime);
 						context.put("ScheduleTime", scheduleTime);
+						//context.put("env.ScheduleTime",scheduleTime);
 						action.setContext(context);
 					}
 					action.doAction();

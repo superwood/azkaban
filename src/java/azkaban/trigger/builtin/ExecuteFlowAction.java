@@ -231,7 +231,8 @@ public class ExecuteFlowAction implements TriggerAction {
 			executionOptions.setSuccessEmails(flow.getSuccessEmails());
 		}
 		executionOptions.getFlowParameters().put("ScheduleTime", context.get("ScheduleTime").toString());
-		logger.debug("ScheduleTime "+ context.get("ScheduleTime").toString()+ " "+context.get("ScheduleTime"));
+		//executionOptions.getFlowParameters().put("env.ScheduleTime", context.get("ScheduleTime").toString());
+		//logger.debug("ScheduleTime "+ context.get("ScheduleTime").toString()+ " "+context.get("ScheduleTime"));
 
 		exflow.setExecutionOptions(executionOptions);
 		

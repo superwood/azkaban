@@ -69,7 +69,7 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 		executorManager = server.getExecutorManager();
 		scheduleManager = server.getScheduleManager();
 		velocityHelper = new ExecutorVelocityHelper();
-    statsDir = server.getServerProps().getString("azkaban.stats.dir");
+        statsDir = server.getServerProps().getString("azkaban.stats.dir");
 	}
 
 	@Override
@@ -675,6 +675,7 @@ public class ExecutorServlet extends LoginAbstractAzkabanServlet {
 		ret.put("submitTime", exFlow.getSubmitTime());
 		ret.put("updateTime", exFlow.getUpdateTime());
 		ret.put("ScheduleTime", exFlow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
+		//ret.put("env.ScheduleTime", exFlow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
 		//bug("ScheduleTime: " + exFlow.getExecutionOptions().getFlowParameters().get("ScheduleTime"));
 	}
 	

@@ -371,8 +371,15 @@ public class JobRunner extends EventHandler implements Runnable {
 					props.put(AbstractProcessJob.ENV_PREFIX+CommonJobProperties.HADOOP_PROXY_USER, jobProxyUser);
 				}
 			}
-			logger.info("proxy user is "+defaultProxyUser);
-			
+
+			/*
+			* add ScheduleTime To env
+			* */
+			if( props.containsKey("ScheduleTime")){
+				String ScheduleTime = props.getString("ScheduleTime");
+				props.put("env.ScheduleTime", ScheduleTime);
+			}
+			logger.debug("job props "+props);
 			//job = JobWrappingFactory.getJobWrappingFactory().buildJobExecutor(node.getJobId(), props, logger);
 			try {
 				job = jobtypeManager.buildJobExecutor(node.getJobId(), props, logger);

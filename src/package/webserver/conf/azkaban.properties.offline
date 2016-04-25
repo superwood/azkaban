@@ -8,7 +8,7 @@ default.timezone.id=Asia/Chongqing
 
 #Azkaban UserManager class
 user.manager.class=azkaban.user.XmlUserManager
-user.manager.xml.file=conf/azkaban-users.xml
+user.manager.xml.file=conf/azkaban-users.xml.offline
 
 #Loader for projects
 executor.global.properties=conf/global.properties
@@ -56,5 +56,6 @@ job.success.email=
 lockdown.create.projects=false
 project.default.permissions=ADMIN
 ##project.default.permissions=READ,WRITE,EXECUTE,SCHEDULE,METRICS,ADMIN
-
 cache.directory=cache
+# trigger interval ms
+trigger.scan.interval=60000
