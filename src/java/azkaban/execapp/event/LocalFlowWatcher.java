@@ -46,7 +46,7 @@ public class LocalFlowWatcher extends FlowWatcher {
 		runner.removeListener(watcherListener);
 		runner = null;
 		
-		getLogger().info("Stopping watcher, and unblocking pipeline");
+		getLogger().info("Stopping watcher, and unblocking pipeline. execId:" + getExecId());
 		super.failAllWatches();
 	}
 

@@ -47,7 +47,7 @@ if [ -z $AZKABAN_OPTS ]; then
 fi
 AZKABAN_OPTS="$AZKABAN_OPTS -server -Dcom.sun.management.jmxremote -Djava.io.tmpdir=$tmpdir -Dexecutorport=$executorport -Dserverpath=$serverpath"
 ##DEBUG_OPTS="-Xdebug -server -Xrunjdwp:transport=dt_socket,server=y,address=8001"
-java $AZKABAN_OPTS $DEBUG_OPTS $JAVA_LIB_PATH -cp $CLASSPATH azkaban.webapp.AzkabanWebServer -conf $azkaban_dir/conf $@ &
+java $AZKABAN_OPTS $DEBUG_OPTS $JAVA_LIB_PATH -cp $CLASSPATH azkaban.webapp.AzkabanWebServer -conf $azkaban_dir/conf $@ 1>logs/web.nohup.log 2>&1 &
 
 echo $! > currentpid
 

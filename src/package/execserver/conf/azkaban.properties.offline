@@ -12,7 +12,7 @@ azkaban.stats.dir=./stats/
 
 database.type=mysql
 mysql.port=3306
-mysql.host=52.6.68.159
+mysql.host=metadb.c5yzcdreb1xr.us-east-1.rds.amazonaws.com
 mysql.database=azkaban_offline
 mysql.user=azkaban_offline
 mysql.password=azkaban_offline

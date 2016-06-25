@@ -204,6 +204,7 @@ public class JobRunner extends EventHandler implements Runnable {
 			node.setUpdateTime(System.currentTimeMillis());
 
 			// For pipelining of jobs. Will watch other jobs.
+			logger.debug("pipelineJobs: "+pipelineJobs.toString()+ " watch:" + watcher.isWatchCancelled()+ " execId "+ watcher.getExecId());
 			if (!pipelineJobs.isEmpty()) {
 				String blockedList = "";
 				ArrayList<BlockingStatus> blockingStatus = new ArrayList<BlockingStatus>();
@@ -219,10 +220,10 @@ public class JobRunner extends EventHandler implements Runnable {
 					logger.info("Pipeline job " + node.getJobId() + " waiting on " + blockedList + " in execution " + watcher.getExecId());
 					
 					for(BlockingStatus bStatus: blockingStatus) {
-						logger.info("Waiting on pipelined job " + bStatus.getJobId());
+						logger.info("Waiting on pipelined job " + bStatus.getJobId()+" execId："+bStatus.getExecId());
 						currentBlockStatus = bStatus;
 						bStatus.blockOnFinishedStatus();
-						logger.info("Pipelined job " + bStatus.getJobId() + " finished.");
+						logger.info("Pipelined job " + bStatus.getJobId() + " execId："+bStatus.getExecId() +" finished.");
 						if (watcher.isWatchCancelled()) {
 							break;
 						}
@@ -231,7 +232,7 @@ public class JobRunner extends EventHandler implements Runnable {
 					fireEvent(Event.create(this, Type.JOB_STATUS_CHANGED));
 				}
 				if (watcher.isWatchCancelled()) {
-					logger.info("Job was cancelled while waiting on pipeline. Quiting.");
+					logger.info("Job was cancelled while waiting on pipeline. Quiting. execid: " + watcher.getExecId());
 					node.setStartTime(System.currentTimeMillis());
 					node.setEndTime(System.currentTimeMillis());
 					node.setStatus(Status.FAILED);

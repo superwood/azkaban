@@ -177,9 +177,9 @@ public class FlowRunner extends EventHandler implements Runnable {
 		}
 		finally {
 			if (watcher != null) {
-				logger.info("Watcher is attached. Stopping watcher.");
+				logger.info("Watcher is attached. Stopping watcher. exec:"+ execId);
 				watcher.stopWatcher();
-				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled());
+				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled()+"exec:"+execId);
 			}
 
 			flow.setEndTime(System.currentTimeMillis());
@@ -586,9 +586,9 @@ public class FlowRunner extends EventHandler implements Runnable {
 			flowCancelled = true;
 			
 			if (watcher != null) {
-				logger.info("Watcher is attached. Stopping watcher.");
+				logger.info("Watcher is attached. Stopping watcher. execId: " +execId);
 				watcher.stopWatcher();
-				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled());
+				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled() + "execId:" +execId);
 			}
 			
 			logger.info("Cancelling " + activeJobRunners.size() + " jobs.");
