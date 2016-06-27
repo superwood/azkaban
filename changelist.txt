@@ -1,0 +1,4 @@
+2016-06-27
+-----------------------------------
+修复bug: 当在pipeline模式下调度,前一个workflow还在执行，后一个workflow已经起来了处于等待阶段.
+这时,当前一个workflow完成,会触发一个firexxx 停止所有watcher . 导致后面的workflow被cancel掉。
