@@ -84,6 +84,7 @@ public abstract class FlowWatcher {
 	}
 	
 	public Status peekStatus(String jobId) {
+		logger.info("Pipeline job peek status from execId:"+flow.getExecutionId()+" jobid: "+jobId);
 		ExecutableNode node = flow.getExecutableNode(jobId);
 		if (node != null) {
 			return node.getStatus();

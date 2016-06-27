@@ -44,9 +44,12 @@ public class LocalFlowWatcher extends FlowWatcher {
 		
 		isShutdown = true;
 		runner.removeListener(watcherListener);
+		try {
+			getLogger().info("Stopping watcher, and unblocking pipeline. pepelineexecId:" + getExecId() + " currentexecId: " + runner.getExecId()+" watch:"+this);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		runner = null;
-		
-		getLogger().info("Stopping watcher, and unblocking pipeline. execId:" + getExecId());
 		super.failAllWatches();
 	}
 
@@ -69,6 +72,11 @@ public class LocalFlowWatcher extends FlowWatcher {
 				}
 			}
 			else if (event.getType() == Type.FLOW_FINISHED) {
+				try {
+					getLogger().info("Stopping watcher,  pepelineexecId:" + getExecId() + " currentexecId: " + runner.getExecId());
+				}catch (Exception e){
+					e.printStackTrace();
+				}
 				stopWatcher();
 			}
 		}

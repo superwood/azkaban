@@ -120,7 +120,9 @@ public class FlowRunner extends EventHandler implements Runnable {
 
 		this.proxyUsers = flow.getProxyUsers();
 	}
-
+	public int getExecId(){
+		return this.execId;
+	}
 	public FlowRunner setFlowWatcher(FlowWatcher watcher) {
 		this.watcher = watcher;
 		return this;
@@ -173,13 +175,14 @@ public class FlowRunner extends EventHandler implements Runnable {
 			if (logger != null) {
 				logger.error("An error has occurred during the running of the flow. Quiting.", t);
 			}
+			System.out.println("An error has occurred during the running of the flow. excep:"+t);
 			flow.setStatus(Status.FAILED);
 		}
 		finally {
 			if (watcher != null) {
-				logger.info("Watcher is attached. Stopping watcher. exec:"+ execId);
+				logger.info("Watcher is attached. Stopping watcher. execId:"+ execId+" watch execId:"+watcher.getExecId()+" watch: "+watcher+" watchcancal: "+watcher.isWatchCancelled()+" watch: "+watcher );
 				watcher.stopWatcher();
-				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled()+"exec:"+execId);
+				logger.info("Watcher cancelled status is " + watcher.isWatchCancelled()+" execId:"+execId+" watch: "+watcher);
 			}
 
 			flow.setEndTime(System.currentTimeMillis());
@@ -187,6 +190,8 @@ public class FlowRunner extends EventHandler implements Runnable {
 			closeLogger();
 			
 			updateFlow();
+
+			logger.info("fireEventListeners finnished" + execId);
 			this.fireEventListeners(Event.create(this, Type.FLOW_FINISHED));
 		}
 	}
@@ -330,7 +335,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 								Props outputProps = collectOutputProps(node);
 								node.setStatus(Status.QUEUED);
 								JobRunner runner = createJobRunner(node, outputProps);
-								logger.info("Submitting job " + node.getJobId() + " to run.");
+								logger.info("Submitting job " + node.getJobId() + " to run. execId: "+execId);
 								try {
 									executorService.submit(runner);
 									jobRunners.put(node.getJobId(), runner);
@@ -341,13 +346,13 @@ public class FlowRunner extends EventHandler implements Runnable {
 								
 							} // If killed, then auto complete and KILL
 							else if (node.getStatus() == Status.KILLED) {
-								logger.info("Killing " + node.getJobId() + " due to prior errors.");
+								logger.info("Killing " + node.getJobId() + " due to prior errors. execId: "+execId);
 								node.setStartTime(currentTime);
 								node.setEndTime(currentTime);
 								fireEventListeners(Event.create(this, Type.JOB_FINISHED, node));
 							} // If disabled, then we auto skip
 							else if (node.getStatus() == Status.DISABLED) {
-								logger.info("Skipping disabled job " + node.getJobId() + ".");
+								logger.info("Skipping disabled job " + node.getJobId() + ". execId" + execId) ;
 								node.setStartTime(currentTime);
 								node.setEndTime(currentTime);
 								node.setStatus(Status.SKIPPED);
@@ -359,6 +364,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 					}
 					else {
 						if (isFlowFinished() || flowCancelled ) {
+							logger.info("isFlowFinished or flowCancelled: "+ flowCancelled);
 							flowFinished = true;
 							break;
 						}
@@ -398,7 +404,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 			updateFlow();
 		}
 		
-		logger.info("Finishing up flow. Awaiting Termination");
+		logger.info("Finishing up flow. Awaiting Termination. execId: "+execId);
 		executorService.shutdown();
 		
 		synchronized(mainSyncObj) {
@@ -408,11 +414,11 @@ public class FlowRunner extends EventHandler implements Runnable {
 				flow.setStatus(Status.FAILED);
 			case FAILED:
 			case KILLED:
-				logger.info("Flow is set to " + flow.getStatus().toString());
+				logger.info("Flow is set to " + flow.getStatus().toString() +" execId: "+execId);
 				break;
 			default:
 				flow.setStatus(Status.SUCCEEDED);
-				logger.info("Flow is set to " + flow.getStatus().toString());
+				logger.info("Flow is set to " + flow.getStatus().toString()+" execId: "+execId);
 			}
 		}
 	}
@@ -447,6 +453,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 			if (!Status.isStatusFinished(node.getStatus()) ) {
 				return false;
 			}
+			logger.info("node: "+node.getJobId()+"status is "+node.getStatus()+" execId: "+execId);
 		}
 		
 		return true;
