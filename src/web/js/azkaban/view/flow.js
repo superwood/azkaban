@@ -155,7 +155,18 @@ azkaban.ExecutionsView = Backbone.View.extend({
 			var tdEndTime = document.createElement("td");
 			$(tdEndTime).text(endTime);
 			row.appendChild(tdEndTime);
-			
+
+
+			var scheduleTime = "-";
+			if (executions[i].scheduleTime != '') {
+				scheduleTime = executions[i].ScheduleTime;
+			}
+
+			var tdScheduleTime = document.createElement("td");
+			$(tdScheduleTime).text(scheduleTime);
+			row.appendChild(tdScheduleTime);
+
+
 			var tdElapsed = document.createElement("td");
 			$(tdElapsed).text( getDuration(executions[i].startTime, lastTime));
 			row.appendChild(tdElapsed);
