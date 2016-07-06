@@ -218,7 +218,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 		
 		// The current thread is used for interrupting blocks
 		flowRunnerThread = Thread.currentThread();
-		flowRunnerThread.setName("FlowRunner-exec-" + flow.getExecutionId());
+		flowRunnerThread.setName("FlowRunner-exec-" + flow.getExecutionId()+"-"+execId);
 
 	}
 	
@@ -349,6 +349,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 								logger.info("Killing " + node.getJobId() + " due to prior errors. execId: "+execId);
 								node.setStartTime(currentTime);
 								node.setEndTime(currentTime);
+								flow.setStatus(Status.KILLED);
 								fireEventListeners(Event.create(this, Type.JOB_FINISHED, node));
 							} // If disabled, then we auto skip
 							else if (node.getStatus() == Status.DISABLED) {
@@ -393,6 +394,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 						node.setStatus(Status.SKIPPED);
 					}
 					else {
+						logger.info("node status set to KILLED, node:"+node.getJobId()+" execId: "  +execId);
 						node.setStatus(Status.KILLED);
 					}
 					fireEventListeners(Event.create(this, Type.JOB_FINISHED, node));

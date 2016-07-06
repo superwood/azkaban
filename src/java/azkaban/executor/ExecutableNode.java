@@ -26,8 +26,10 @@ import java.util.Set;
 import azkaban.flow.Node;
 import azkaban.utils.JSONUtils;
 import azkaban.utils.Props;
+import org.apache.log4j.Logger;
 
 public class ExecutableNode {
+	private static Logger logger = Logger.getLogger(ExecutableNode.class);
 	private String jobId;
 	private int executionId;
 	private String type;
@@ -124,6 +126,7 @@ public class ExecutableNode {
 	}
 
 	public void setStatus(Status status) {
+		logger.info("set execId node status"+getFlow().getExecutionId()+" "+getJobId()+" "+ status.name());
 		this.status = status;
 	}
 	

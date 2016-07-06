@@ -235,7 +235,7 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
       int skip, 
       int size) throws ExecutorManagerException {
 		List<ExecutableFlow> flows = executorLoader.fetchFlowHistory(
-        projContain, flowContain, userContain, status, begin, end , skip, size);
+				projContain, flowContain, userContain, status, begin, end, skip, size);
 		return flows;
 	}
 	
@@ -450,6 +450,7 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
 					
 					options.setPipelineExecutionId(runningExecId);
 					message = "Flow " + flowId + " is already running with exec id " + runningExecId +". Pipelining level " + options.getPipelineLevel() + ". ";
+					logger.info(message);
 				}
 				else if (options.getConcurrentOption().equals(ExecutionOptions.CONCURRENT_OPTION_SKIP)) {
 					throw new ExecutorManagerException("Flow " + flowId + " is already running. Skipping execution.", ExecutorManagerException.Reason.SkippedExecution);
@@ -885,6 +886,7 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
 	
 	private void failEverything(ExecutableFlow exFlow) {
 		long time = System.currentTimeMillis();
+		logger.info("fail Eeverything flow execId: "+exFlow.getExecutionId() );
 		for (ExecutableNode node: exFlow.getExecutableNodes()) {
 			switch(node.getStatus()) {
 				case SUCCEEDED:
@@ -895,6 +897,11 @@ public class ExecutorManager extends EventHandler implements ExecutorManagerAdap
 					continue;
 				//case UNKNOWN:
 				case READY:
+					try {
+						logger.info("node status set to KILLED, node:" + node.getJobId() + " execId: " + node.getFlow().getExecutionId());
+					}catch (Exception e){
+						logger.error(e.getStackTrace().toString());
+					}
 					node.setStatus(Status.KILLED);
 					break;
 				default:

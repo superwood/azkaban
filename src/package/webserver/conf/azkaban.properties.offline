@@ -16,7 +16,7 @@ azkaban.project.dir=projects
 
 database.type=mysql
 mysql.port=3306
-mysql.host=52.6.68.159
+mysql.host=metadb.c5yzcdreb1xr.us-east-1.rds.amazonaws.com
 mysql.database=azkaban_offline
 mysql.user=azkaban_offline
 mysql.password=azkaban_offline
@@ -41,7 +41,8 @@ executor.metric.reports=true
 
 # Azkaban Executor settings
 executor.port=12321
-executor.host=52.5.47.234
+#executor.host=52.5.47.234
+executor.host=172.31.8.39
 # mail settings
 mail.sender=monitor.dataPlatform@mobvista.com
 mail.host=smtp.exmail.qq.com
