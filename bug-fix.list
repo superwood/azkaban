@@ -1,0 +1,13 @@
+fix bug
+
+    bug 描述
+        在一个work flow里面两个前后依赖的job   A,B 
+        当A失败时候 在jobrunner里面会设置自己的状态为FAILED,同时触发重跑机制
+        这时,在flowrunner里面一直在查询B是否可以运行(通过检测其依赖job A 状态),如果A状态为失败，则B被设置为killed
+
+        这里就有一个竞态问题:A 失败后状态为FAILED (这时flowrunner线程获取到了这个状态) 但经过重试A又成功了。但B被设置成了KILLED状态。不合理
+
+
+
+    bug fix 本次修改思路
+        在jobrunner里面不设置FAILED状态，而是设置FAILED_RETRY状态(新增),只有当三次重试失败后才设置A的状态为FAILED
