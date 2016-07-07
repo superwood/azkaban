@@ -35,7 +35,7 @@ public class ExecutableNode {
 	private String type;
 	private String jobPropsSource;
 	private String inheritPropsSource;
-	private Status status = Status.READY;
+	private volatile Status  status = Status.READY;
 	private long startTime = -1;
 	private long endTime = -1;
 	private long updateTime = -1;
@@ -126,7 +126,7 @@ public class ExecutableNode {
 	}
 
 	public void setStatus(Status status) {
-		logger.info("set execId node status"+getFlow().getExecutionId()+" "+getJobId()+" "+ status.name());
+		logger.info("set execId node status "+getFlow().getExecutionId()+" "+getJobId()+" "+ status.name());
 		this.status = status;
 	}
 	

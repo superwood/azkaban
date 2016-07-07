@@ -436,6 +436,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 				// and what the status should be set to.
 				Status impliedStatus = getImpliedStatus(node);
 				if (getImpliedStatus(node) != null) {
+					logger.info("node status set to "+impliedStatus+ ", node:"+node.getJobId()+" execId: "  +execId);
 					node.setStatus(impliedStatus);
 					jobsToRun.add(node);
 				}
@@ -730,6 +731,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 		
 		ExecutionOptions options = flow.getExecutionOptions();
 		if (shouldKill || flowCancelled || (flowFailed && options.getFailureAction() != FailureAction.FINISH_ALL_POSSIBLE)) {
+			logger.info("node status set to KILLED, node:"+node.getJobId()+" execId: "  +execId);
 			return Status.KILLED;
 		}
 		
@@ -766,8 +768,11 @@ public class FlowRunner extends EventHandler implements Runnable {
 					
 					updateFlow();
 					
-					if (node.getStatus() == Status.FAILED) {
+					if (node.getStatus() == Status.FAILED||node.getStatus() == Status.FAILED_UNDERRETRY) {
 						// Retry failure if conditions are met.
+						if(runner.getRetries() == 0 ){
+							node.setStatus(Status.FAILED);
+						}
 						if (!runner.isCancelled() && runner.getRetries() > node.getAttempt()) {
 							logger.info("Job " + node.getJobId() + " will be retried. Attempt " + node.getAttempt() + " of " + runner.getRetries());
 							node.setDelayedExecution(runner.getRetryBackoff());
@@ -779,6 +784,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 								logger.info("Job " + node.getJobId() + " has run out of retry attempts");
 								// Setting delayed execution to 0 in case this is manually re-tried.
 								node.setDelayedExecution(0);
+								node.setStatus(Status.FAILED);
 							}
 
 							flowFailed = true;

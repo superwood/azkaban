@@ -285,7 +285,7 @@ public class JobRunner extends EventHandler implements Runnable {
 				runJob();
 			}
 			else {
-				node.setStatus(Status.FAILED);
+				node.setStatus(Status.FAILED_UNDERRETRY);
 				logError("Job run failed!");
 			}
 			
@@ -408,7 +408,7 @@ public class JobRunner extends EventHandler implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			node.setStatus(Status.FAILED);
+			node.setStatus(Status.FAILED_UNDERRETRY);
 			logError("Job run failed!");
 			logError(e.getMessage() + e.getCause());
 			return;
