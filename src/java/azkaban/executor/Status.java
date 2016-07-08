@@ -53,6 +53,8 @@ public enum Status {
 			return DISABLED;
 		case 110:
 			return QUEUED;
+		case 120:
+			return FAILED;
 		default:
 			return READY;
 		}
