@@ -362,8 +362,14 @@ public class ExecutableNode {
 			int attempt = (Integer)map.get("attempt");
 			long startTime = JSONUtils.getLongFromObject(map.get("startTime"));
 			long endTime = JSONUtils.getLongFromObject(map.get("endTime"));
-			Status status = Status.valueOf((String)map.get("status"));
-			
+
+			String s_status = (String)map.get("status");
+			if( "FAILED_UNDERRETRY".equals(s_status ) ){
+				s_status="FAILED";
+			}
+			Status status = Status.valueOf(s_status);
+
+
 			return new Attempt(attempt, startTime, endTime, status);
 		}
 		
