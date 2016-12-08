@@ -196,6 +196,7 @@ public class FlowRunnerManager implements EventListener {
 					lastSubmitterThreadCheckTime = System.currentTimeMillis();
 					FlowRunner flowRunner = queue.take();
 					executorService.submit(flowRunner);
+					logger.info("submit new flow:"+flowRunner.getExecId()+"to executor server. queue size: "+queue.size() );
 				} catch (InterruptedException e) {
 					logger.info("Interrupted. Probably to shut down.");
 				}

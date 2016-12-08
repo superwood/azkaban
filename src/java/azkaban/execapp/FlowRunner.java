@@ -237,6 +237,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 		try {
 			flow.setUpdateTime(time);
 			executorLoader.updateExecutableFlow(flow);
+
 		} catch (ExecutorManagerException e) {
 			logger.error("Error updating flow.", e);
 		}
@@ -350,6 +351,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 								node.setStartTime(currentTime);
 								node.setEndTime(currentTime);
 								flow.setStatus(Status.KILLED);
+								//flow.setStatus(Status.FAILED); //这里设置成FAILED更合适
 								fireEventListeners(Event.create(this, Type.JOB_FINISHED, node));
 							} // If disabled, then we auto skip
 							else if (node.getStatus() == Status.DISABLED) {
@@ -406,11 +408,12 @@ public class FlowRunner extends EventHandler implements Runnable {
 			updateFlow();
 		}
 		
-		logger.info("Finishing up flow. Awaiting Termination. execId: "+execId);
+		logger.info("Finishing up flow. Awaiting Termination. execId: "+execId+" status: "+flow.getStatus());
 		executorService.shutdown();
 		
 		synchronized(mainSyncObj) {
 			switch(flow.getStatus()) {
+			case FAILED_UNDERRETRY:
 			case FAILED_FINISHING:
 				logger.info("Setting flow status to Failed.");
 				flow.setStatus(Status.FAILED);
@@ -419,7 +422,7 @@ public class FlowRunner extends EventHandler implements Runnable {
 				logger.info("Flow is set to " + flow.getStatus().toString() +" execId: "+execId);
 				break;
 			default:
-				flow.setStatus(Status.SUCCEEDED);
+				flow.setStatus(Status.SUCCEEDED );
 				logger.info("Flow is set to " + flow.getStatus().toString()+" execId: "+execId);
 			}
 		}
